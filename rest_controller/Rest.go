@@ -131,20 +131,7 @@ func deleteAccount(c *gin.Context, interactor interactor.Interactor) {
 }
 
 func InitCont(interactor interactor.Interactor) {
-	// Ping database
-	/*db, err := getDB()
-	if err != nil {
-		fmt.Println("Error with the database" + err.Error())
-		return
-	} else {
-		err = db.Ping()
-		if err != nil {
-			fmt.Println("Error making connection to the DB, please check credentials. The error is: " + err.Error())
-			return
-		}
-	}*/
 	router := gin.Default()
-	//router.GET("/users", getUsers)
 	router.GET("/users", func(c *gin.Context) { getUsers(c, interactor) })
 	router.GET("/user", func(c *gin.Context) { getUser(c, interactor) })
 	router.POST("/user", func(c *gin.Context) { addUser(c, interactor) })

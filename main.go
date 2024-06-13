@@ -1,15 +1,20 @@
 package main
 
 import (
+	"Users/grpc_cont"
 	"Users/interactor"
 	"Users/mysql_gateway"
-	"Users/rest_controller"
+
+	//"Users/rest_controller"
+	"fmt"
 )
 
 func main() {
 	gateway := mysql_gateway.Gateway{}
 	interactor := interactor.Interactor{My_gateway: &gateway}
-	rest_controller.InitCont(interactor)
+	//rest_controller.InitCont(interactor)
+	grpc_cont.InitGRPC(interactor)
+	fmt.Println("This is still going on")
 }
 
 /*
@@ -29,6 +34,7 @@ TODO:
 /	-Maybe check for account number validity (exactly 4 numbers)?
 /	-Maybe check that first_name is shorter than their last_name?
 I need to use Rest and GRPC for the controllers
+Faire un pseudo-client rest et grpc pour pouvoir faire tourner les tests
 I need to do unit testing
 	-Check getUsers
 	-Check getUser

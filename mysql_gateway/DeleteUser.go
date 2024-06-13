@@ -6,7 +6,7 @@ import (
 )
 
 func (g *Gateway) DeleteUser(id int) *models.User {
-	fmt.Println("Into gateway")
+	fmt.Println("Into gateway DeleteUser")
 	user := models.User{}
 	db, err := getDB()
 	if err != nil {
