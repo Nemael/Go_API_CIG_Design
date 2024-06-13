@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	Users_GetUsers_FullMethodName     = "/Users/GetUsers"
-	Users_GetUser_FullMethodName      = "/Users/GetUser"
-	Users_CreateUser_FullMethodName   = "/Users/CreateUser"
-	Users_DeleteUser_FullMethodName   = "/Users/DeleteUser"
-	Users_CheckoutUser_FullMethodName = "/Users/CheckoutUser"
-	Users_ReturnUser_FullMethodName   = "/Users/ReturnUser"
+	Users_GetUsers_FullMethodName      = "/Users/GetUsers"
+	Users_GetUser_FullMethodName       = "/Users/GetUser"
+	Users_CreateUser_FullMethodName    = "/Users/CreateUser"
+	Users_DeleteUser_FullMethodName    = "/Users/DeleteUser"
+	Users_CreateAccount_FullMethodName = "/Users/CreateAccount"
+	Users_DeleteAccount_FullMethodName = "/Users/DeleteAccount"
 )
 
 // UsersClient is the client API for Users service.
@@ -35,8 +35,8 @@ type UsersClient interface {
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
-	CheckoutUser(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error)
-	ReturnUser(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error)
+	CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error)
+	DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error)
 }
 
 type usersClient struct {
@@ -87,20 +87,20 @@ func (c *usersClient) DeleteUser(ctx context.Context, in *DeleteUserRequest, opt
 	return out, nil
 }
 
-func (c *usersClient) CheckoutUser(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error) {
+func (c *usersClient) CreateAccount(ctx context.Context, in *CreateAccountRequest, opts ...grpc.CallOption) (*CreateAccountResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateAccountResponse)
-	err := c.cc.Invoke(ctx, Users_CheckoutUser_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Users_CreateAccount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *usersClient) ReturnUser(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error) {
+func (c *usersClient) DeleteAccount(ctx context.Context, in *DeleteAccountRequest, opts ...grpc.CallOption) (*DeleteAccountResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteAccountResponse)
-	err := c.cc.Invoke(ctx, Users_ReturnUser_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Users_DeleteAccount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,8 +115,8 @@ type UsersServer interface {
 	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
-	CheckoutUser(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error)
-	ReturnUser(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error)
+	CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error)
+	DeleteAccount(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error)
 	mustEmbedUnimplementedUsersServer()
 }
 
@@ -136,11 +136,11 @@ func (UnimplementedUsersServer) CreateUser(context.Context, *CreateUserRequest) 
 func (UnimplementedUsersServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
 }
-func (UnimplementedUsersServer) CheckoutUser(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckoutUser not implemented")
+func (UnimplementedUsersServer) CreateAccount(context.Context, *CreateAccountRequest) (*CreateAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
 }
-func (UnimplementedUsersServer) ReturnUser(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReturnUser not implemented")
+func (UnimplementedUsersServer) DeleteAccount(context.Context, *DeleteAccountRequest) (*DeleteAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
 }
 func (UnimplementedUsersServer) mustEmbedUnimplementedUsersServer() {}
 
@@ -227,38 +227,38 @@ func _Users_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Users_CheckoutUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Users_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateAccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UsersServer).CheckoutUser(ctx, in)
+		return srv.(UsersServer).CreateAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Users_CheckoutUser_FullMethodName,
+		FullMethod: Users_CreateAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UsersServer).CheckoutUser(ctx, req.(*CreateAccountRequest))
+		return srv.(UsersServer).CreateAccount(ctx, req.(*CreateAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Users_ReturnUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Users_DeleteAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteAccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UsersServer).ReturnUser(ctx, in)
+		return srv.(UsersServer).DeleteAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Users_ReturnUser_FullMethodName,
+		FullMethod: Users_DeleteAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UsersServer).ReturnUser(ctx, req.(*DeleteAccountRequest))
+		return srv.(UsersServer).DeleteAccount(ctx, req.(*DeleteAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -287,12 +287,12 @@ var Users_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Users_DeleteUser_Handler,
 		},
 		{
-			MethodName: "CheckoutUser",
-			Handler:    _Users_CheckoutUser_Handler,
+			MethodName: "CreateAccount",
+			Handler:    _Users_CreateAccount_Handler,
 		},
 		{
-			MethodName: "ReturnUser",
-			Handler:    _Users_ReturnUser_Handler,
+			MethodName: "DeleteAccount",
+			Handler:    _Users_DeleteAccount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

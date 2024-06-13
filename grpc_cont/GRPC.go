@@ -121,29 +121,14 @@ func (s myUsersServer) CreateAccount(ctx context.Context, req *GRPC.CreateAccoun
 	}, nil
 }
 
-/*func (s myUsersServer) DeleteAccount(ctx context.Context, req *users.DeleteAccountRequest) (*users.DeleteAccountResponse, error) {
-	var book books.Book
-	db, err := getDB()
-	if err != nil {
-		return nil, err
-	}
-	id := req.Id // Query parameter
-	row := db.QueryRow("SELECT id, title, author, quantity FROM books where id = ?", id)
-	err = row.Scan(&book.Id, &book.Title, &book.Author, &book.Quantity)
-	if err != nil {
-		return nil, err
-	}
-	book.Quantity += int64(1)
-
-	db.QueryRow("UPDATE books SET quantity = ? WHERE id = ?", book.Quantity, book.Id)
-	return &books.ReturnBookResponse{
-		Book: &book,
-	}, nil
-}*/
+func (s myUsersServer) DeleteAccount(ctx context.Context, req *GRPC.DeleteAccountRequest) (*GRPC.DeleteAccountResponse, error) {
+	My_interactor.DeleteAccount(int(req.UserId), int(req.AccountNumber))
+	return &GRPC.DeleteAccountResponse{}, nil
+}
 
 func InitGRPC(interactor interactor.Interactor) {
 	My_interactor = interactor
-	lis, err := net.Listen("tcp", ":8080")
+	lis, err := net.Listen("tcp", ":8081")
 	if err != nil {
 		log.Fatalf("Cannot create listener %s", err)
 	}

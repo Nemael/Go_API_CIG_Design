@@ -4,6 +4,8 @@ import (
 	"Users/grpc_cont"
 	"Users/interactor"
 	"Users/mysql_gateway"
+	"Users/rest_controller"
+	"os"
 
 	//"Users/rest_controller"
 	"fmt"
@@ -13,7 +15,13 @@ func main() {
 	gateway := mysql_gateway.Gateway{}
 	interactor := interactor.Interactor{My_gateway: &gateway}
 	//rest_controller.InitCont(interactor)
-	grpc_cont.InitGRPC(interactor)
+	fmt.Println(os.Args)
+	if os.Args[1] == "REST" {
+		rest_controller.InitCont(interactor)
+	}
+	if os.Args[1] == "GRPC" {
+		grpc_cont.InitGRPC(interactor)
+	}
 	fmt.Println("This is still going on")
 }
 
@@ -26,6 +34,8 @@ curl localhost:8080/user?id=1 --request "DELETE"
 curl localhost:8080/account --header "Content-Type: application/json" -d @account_data.json --request "POST"
 curl "localhost:8080/account?id=3&account_number=4321" --request "DELETE"
 
+protoc --go_out=GRPC --go_opt=paths=source_relative --go-grpc_out=GRPC --go-grpc_opt=paths=source_relative GRPC.proto
+
 /*
 TODO:
 /Make sure that the error return values are received correctly to the client and the unit tests
@@ -33,8 +43,8 @@ TODO:
 /I need to put some kind of verification on the interactor
 /	-Maybe check for account number validity (exactly 4 numbers)?
 /	-Maybe check that first_name is shorter than their last_name?
-I need to use Rest and GRPC for the controllers
-Faire un pseudo-client rest et grpc pour pouvoir faire tourner les tests
+/I need to use Rest and GRPC for the controllers
+/Faire un pseudo-client rest et grpc pour pouvoir faire tourner les tests
 I need to do unit testing
 	-Check getUsers
 	-Check getUser
